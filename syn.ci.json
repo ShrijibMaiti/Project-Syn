@@ -1,0 +1,15 @@
+{
+  "syn": {
+    "complexity": [
+      {"name": "monthly_report",
+       "target": "sample_app.checkout:monthly_report",
+       "n_min": 20, "n_max": 12000, "points": 10}
+    ],
+    "stability": [
+      {"name": "checkout_db",
+       "target": "sample_app.checkout:CHECKOUT_DB.call",
+       "samples_per_level": 25, "repeats": 2,
+       "operating_load": 490}
+    ]
+  }
+}

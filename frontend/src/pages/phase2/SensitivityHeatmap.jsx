@@ -461,7 +461,7 @@ export default function SensitivityHeatmap() {
       {res.status === 'unavailable' ? (
         <ModeState
           title="REQUIRES THE LIVE GATE API"
-          reason="Set VITE_API_BASE_URL and start the API. This page has no captured fixture on purpose: a counterfactual computed from placeholder numbers would be a fabricated spec."
+          reason="Set VITE_API_BASE_URL (live API) or VITE_DATA_BASE_URL (CI-published runs). This page has no captured fixture on purpose: a counterfactual computed from placeholder numbers would be a fabricated spec."
           hatch
         />
       ) : null}

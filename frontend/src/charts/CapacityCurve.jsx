@@ -153,7 +153,7 @@ export default function CapacityCurve({ data }) {
           />
           <line x1={nowX} y1={288} x2={sepX} y2={288} stroke="#7a7a7a" strokeWidth={1} />
           <text x={(nowX + sepX) / 2} y={281} textAnchor="middle" fontSize={10} fill="#a3a3a3">
-            HEADROOM {one(headroom)}
+            ΔN = {one(headroom)}
           </text>
           <text x={nowX - 7} y={296} textAnchor="end" fontSize={10} fill="#a3a3a3">
             NOW N = {one(Number(operatingPoint))}

@@ -130,7 +130,7 @@ export default function StructuralRiskMap() {
       {res.status === 'unavailable' ? (
         <State
           title="REQUIRES THE LIVE GATE API"
-          reason="Set VITE_API_BASE_URL and start the API. This page has no captured fixture on purpose: a blast radius drawn on an invented graph would be a fabricated risk."
+          reason="Set VITE_API_BASE_URL (live API) or VITE_DATA_BASE_URL (CI-published runs). This page has no captured fixture on purpose: a blast radius drawn on an invented graph would be a fabricated risk."
           hatch
         />
       ) : null}

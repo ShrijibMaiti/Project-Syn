@@ -14,7 +14,7 @@
  * its latest run.
  */
 
-import { apiClient, ApiUnavailableError } from './client.js';
+import { apiClient, ApiUnavailableError, isStaticMode } from './client.js';
 import {
   adaptBlind,
   adaptComplexity,
@@ -293,7 +293,7 @@ export const getVerdict = async (state, options) => {
       certificate: [
         { k: 'COMMIT', v: raw.commit },
         { k: 'RECORDED', v: stamp ?? '—' },
-        { k: 'SOURCE', v: 'LIVE GATE RUN' },
+        { k: 'SOURCE', v: isStaticMode() ? 'CI GATE RUN · GITHUB ACTIONS' : 'LIVE GATE RUN' },
         {
           k: 'EVIDENCE',
           v: `${measured === probes.length ? 'COMPLETE' : 'PARTIAL'} — ${measured} / ${probes.length} LENSES`,

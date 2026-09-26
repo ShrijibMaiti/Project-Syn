@@ -8,6 +8,7 @@ import time
 
 from fastapi import FastAPI, Query
 
+from sample_app.checkout import checkout as run_checkout
 from sample_app.db import DB
 from sample_app.order_service import (build_order_report, build_order_report_fixed,
                                       list_orders_with_items, order_with_retries)
@@ -52,6 +53,14 @@ def work(n: int = Query(default=100, ge=1, le=200000),
     return {"n": n, "path": path, "rows": len(rows),
             "elapsed_s": time.perf_counter() - t0,
             "db_calls": DB.calls, "ops": len(rows)}
+
+
+@app.post("/checkout")
+def checkout(n: int = Query(default=50, ge=1, le=20000)):
+    """Checkout path gated by SYN in CI (syn.ci.json)."""
+    t0 = time.perf_counter()
+    rows = run_checkout(n)
+    return {"n": n, "rows": len(rows), "elapsed_s": time.perf_counter() - t0}
 
 
 @app.get("/order/{order_id}")

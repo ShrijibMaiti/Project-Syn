@@ -1,34 +1,110 @@
-﻿name: SYN merge gate
+name: SYN gate
+
+# Measures the change on this runner and gates it by exit code:
+#   0 = merge allowed   1 = merge refused   2 = gate could not run
+# This workflow is READ-ONLY. It uploads the run as an artifact; the separate
+# "SYN publish" workflow (workflow_run) publishes it to the syn-runs branch and
+# comments on the PR, without ever executing pull-request code.
 
 on:
   pull_request:
+  push:
+    branches: [main]
+    paths-ignore: ["frontend/**", "**/*.md", "docs/**"]
   workflow_dispatch:
+    inputs:
+      seed_demos:
+        description: "Also re-measure the four demo runs and blind detection (~15 min)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: syn-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  syn:
+  self-test:
+    name: Detector self-tests
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install
-        run: pip install -e ".[dev]"
-      - name: Run SYN gate
-        # Exit 1 = refused. Exit 2 = gate could not run, which also fails the job:
-        # a gate that cannot run must never be read as approval.
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+      - run: pip install -r requirements-ci.txt
+      - name: Noise floor, sensitivity, code graph
         run: |
-          python -m gateway.ci_gate \
-            --commit "${GITHUB_SHA}" \
-            --out syn-certificate.md \
-            --json-out syn-verdict.json \
-            --summary
-      - name: Upload certificate
+          python tests/check_17_noise_floor.py
+          python tests/check_18_sensitivity.py
+          python tests/check_19_riskmap.py
+
+  gate:
+    name: SYN gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+      - run: pip install -r requirements-ci.txt
+
+      - name: Measure and gate
+        id: gate
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          SEED_DEMOS: ${{ inputs.seed_demos }}
+          SYN_DASHBOARD_URL: ${{ vars.SYN_DASHBOARD_URL }}
+        run: |
+          sha7="${HEAD_SHA:0:7}"
+          if [ "$EVENT" = "pull_request" ]; then
+            run_id="pr-${PR_NUMBER}-${sha7}"
+          else
+            run_id="main-${sha7}"
+          fi
+          extra=""
+          if [ "$SEED_DEMOS" = "true" ]; then extra="--seed-demos"; fi
+          set +e
+          python -m gateway.ci_run \
+            --manifest syn.ci.json \
+            --run-id "$run_id" \
+            --out-dir syn-out \
+            --calibrate $extra \
+            --pr-number "${PR_NUMBER}" \
+            --sha "$HEAD_SHA" \
+            --event "$EVENT"
+          code=$?
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+
+      - name: Upload run
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: syn-certificate
-          path: |
-            syn-certificate.md
-            syn-verdict.json
+          name: syn-run
+          path: syn-out/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Enforce verdict
+        # Exit 1 = refused. Exit 2 = the gate could not run, which also fails:
+        # a gate that cannot run must never be read as approval.
+        env:
+          CODE: ${{ steps.gate.outputs.exit_code }}
+        run: |
+          case "$CODE" in
+            0) echo "SYN: merge allowed" ;;
+            1) echo "::error title=SYN refused this merge::See the certificate in the job summary"; exit 1 ;;
+            *) echo "::error title=SYN gate could not run::exit code ${CODE:-missing}"; exit 2 ;;
+          esac

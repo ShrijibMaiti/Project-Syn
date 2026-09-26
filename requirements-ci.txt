@@ -1,0 +1,5 @@
+# Minimal dependencies for the SYN gate in CI (no PyTorch: the gate never uses the Twin).
+numpy>=1.26,<3
+scipy>=1.11
+fastapi>=0.110
+pydantic>=2.6

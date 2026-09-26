@@ -7,6 +7,8 @@ the UI plots DATA, not just a curve."""
 from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
+import os
+
 from fastapi import APIRouter, HTTPException, Query
 
 from gateway import store
@@ -104,7 +106,15 @@ def complexity(target: str, commit: str = "latest"):
 def evidence(commit: str = "latest", target: str = "default"):
     """M0 vs M1 comparison, kappa CI, adequacy — the statistical detail."""
     s = stability(target, commit)
-    floor = (store.load_blob("calibration") or {}).get("kappa_floor")
+    # The floor that was APPLIED at gate time is recorded with the run. Prefer
+    # it: runs come from different machines (laptop, CI runners) and each has
+    # its own floor. The store-wide calibration is only a fallback for runs
+    # recorded before the floor was stored per run.
+    e = _pick(_probe_block(_resolve(None if commit == "latest" else commit),
+                           "stability"), target) or {}
+    floor = e.get("kappa_floor")
+    if floor is None:
+        floor = (store.load_blob("calibration") or {}).get("kappa_floor")
     k = s["fit"]["kappa"]
     return {
         "target": s["target"],
@@ -120,7 +130,9 @@ def evidence(commit: str = "latest", target: str = "default"):
         "measurement": s["measurement"],
         "trap": s["trap"],
         "noise_floor": floor,
-        "exceeds_floor": (None if not floor or k is None
+        "floor_ratio": e.get("floor_ratio"),
+        "exceeds_floor": (e["exceeds_floor"] if e.get("exceeds_floor") is not None
+                          else None if not floor or k is None
                           else bool(k > floor * 10)),
         "r2_caveat": ("R^2 is NOT the decision criterion: under relative-error "
                       "weighting it can read 1.0000 while kappa is badly wrong. "
@@ -151,7 +163,12 @@ def landing():
     """Proof numbers for the marketing page, composed from the stored run, the
     blind-detection results, and the harness calibration. Nothing here is
     hand-written: if no run is stored this 404s rather than inventing numbers."""
-    run = _resolve(None)
+    # The landing page tells the refusal story, so it shows the showcase run
+    # (SYN_LANDING_RUN, default demo-faulty) when that run exists -- a real
+    # measurement like any other -- and the latest run otherwise.
+    showcase = os.environ.get("SYN_LANDING_RUN", "demo-faulty")
+    run = store.load_run(showcase) if showcase else None
+    run = run or _resolve(None)
     v = run["verdict"]
     c = (_probe_block(run, "complexity") or [{}])[0]
     st = (_probe_block(run, "stability") or [{}])[0]

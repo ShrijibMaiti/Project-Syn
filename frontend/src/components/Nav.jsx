@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import { getRunMeta } from '../api/endpoints.js';
+import { isStaticMode } from '../api/client.js';
 import pkg from '../../package.json';
 
 /**
@@ -107,7 +108,7 @@ export default function Nav() {
           <span>
             DATA{' '}
             <span className={meta?.live ? 'syn-status-armed' : 'syn-status-val'}>
-              {meta ? (meta.live ? 'LIVE' : 'FIXTURE') : '…'}
+              {meta ? (meta.live ? (isStaticMode() ? 'CI RUN' : 'LIVE') : 'FIXTURE') : '…'}
             </span>
           </span>
         </div>

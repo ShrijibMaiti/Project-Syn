@@ -42,7 +42,14 @@ def timed_sweep(fn, n_values, repeats: int = 5, warmup: int = 2, counter=None):
     code). The median over repeats suppresses scheduler and cache artifacts; the
     warmup pass absorbs first-call import/JIT/page-fault costs. `spread` is
     reported so an unreliable measurement is visible rather than silent.
+
+    The garbage collector is paused while timing (as `timeit` does). A cyclic
+    collection walks the WHOLE heap -- including fixture data the target never
+    touches -- and firing a varying number of them per call made an O(n) target
+    read as n^1.2-1.3 on noisy runners. With GC paused, an O(n) target measures
+    1.0 +/- 0.1 and an O(n^2) one still measures 2.0.
     """
+    import gc
     import time
     from statistics import median
 
@@ -51,12 +58,19 @@ def timed_sweep(fn, n_values, repeats: int = 5, warmup: int = 2, counter=None):
         for _ in range(warmup):
             fn(n)
         samples = []
-        for _ in range(repeats):
-            if counter:
-                counter()
-            t0 = time.perf_counter()
-            fn(n)
-            samples.append(time.perf_counter() - t0)
+        gc.collect()
+        gc_was_enabled = gc.isenabled()
+        gc.disable()
+        try:
+            for _ in range(repeats):
+                if counter:
+                    counter()
+                t0 = time.perf_counter()
+                fn(n)
+                samples.append(time.perf_counter() - t0)
+        finally:
+            if gc_was_enabled:
+                gc.enable()
         rows.append({"n": float(n), "elapsed_s": float(median(samples)),
                      "t_min": float(min(samples)), "t_max": float(max(samples)),
                      "spread": float(max(samples) / max(min(samples), 1e-12))})

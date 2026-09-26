@@ -35,7 +35,7 @@ def _load_raw(path: str) -> Dict[str, Any]:
             import tomli as tomllib
         with open(path, "rb") as fh:
             return tomllib.load(fh)
-    with open(path) as fh:
+    with open(path, encoding="utf-8-sig") as fh:
         return json.load(fh)
 
 

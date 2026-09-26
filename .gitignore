@@ -19,3 +19,7 @@ data/runs/
 .DS_Store
 Thumbs.db
 .vscode/
+# SYN CI output
+syn-out/
+published/
+artifact/

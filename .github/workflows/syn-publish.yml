@@ -1,0 +1,109 @@
+name: SYN publish
+
+# Runs AFTER "SYN gate" finishes, from the default branch, with write access.
+# It never checks out or executes pull-request code: the run artifact is
+# validated as data (gateway/publish_run.py), merged into the syn-runs branch,
+# and exported as static JSON that the dashboard reads.
+
+on:
+  workflow_run:
+    workflows: ["SYN gate"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+concurrency:
+  group: syn-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      RUN_EVENT: ${{ github.event.workflow_run.event }}
+      HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+      HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+      HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      SYN_DASHBOARD_URL: ${{ vars.SYN_DASHBOARD_URL }}
+    steps:
+      - name: Check out trusted code (default branch)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-ci.txt
+
+      - name: Download run artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: syn-run
+          path: artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge into syn-runs and export
+        id: publish
+        run: |
+          trusted=""
+          if [ "$RUN_EVENT" != "pull_request" ] && [ "$HEAD_BRANCH" = "$DEFAULT_BRANCH" ] \
+             && [ "$HEAD_REPO" = "$REPO" ]; then
+            trusted="--trusted"
+          fi
+          remote="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          run_id=$(python -c "import json,re;r=str(json.load(open('artifact/meta.json'))['run_id']);assert re.fullmatch(r'[A-Za-z0-9._-]{1,80}',r);print(r)")
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+
+          # Fresh clone -> merge -> export -> push. If another publish landed in
+          # between, start over from the new tip rather than rebasing generated files.
+          for attempt in 1 2 3; do
+            rm -rf published
+            if git ls-remote --exit-code --heads "$remote" syn-runs > /dev/null; then
+              git clone --quiet --depth 1 --branch syn-runs "$remote" published
+            else
+              mkdir published
+              git -C published init --quiet -b syn-runs
+              git -C published remote add origin "$remote"
+            fi
+            python -m gateway.publish_run --artifact artifact --published published \
+              $trusted --expect-sha7 "${HEAD_SHA:0:7}"
+            git -C published config user.name "github-actions[bot]"
+            git -C published config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git -C published add -A
+            if git -C published diff --cached --quiet; then echo "nothing to publish"; exit 0; fi
+            git -C published commit --quiet -m "syn: publish ${run_id}"
+            if git -C published push --quiet origin HEAD:syn-runs; then exit 0; fi
+            echo "push rejected (attempt $attempt); retrying from the new tip"
+            sleep $((attempt * 5))
+          done
+          exit 1
+
+      - name: Comment on the pull request
+        if: github.event.workflow_run.event == 'pull_request'
+        env:
+          RUN_ID: ${{ steps.publish.outputs.run_id }}
+        run: |
+          pr=$(echo "$RUN_ID" | sed -nE 's/^pr-([0-9]+)-[0-9a-f]{7}$/\1/p')
+          if [ -z "$pr" ]; then echo "no PR number in run id"; exit 0; fi
+          # The PR number came from the artifact: only comment if that PR's head
+          # really is the commit this run measured.
+          actual=$(gh api "repos/${REPO}/pulls/${pr}" --jq .head.sha || true)
+          if [ "$actual" != "$HEAD_SHA" ]; then echo "PR #$pr head moved on; skipping"; exit 0; fi
+          {
+            head -c 60000 artifact/certificate.md 2>/dev/null || echo "SYN could not produce a certificate for this run."
+            echo
+            if [ -n "$SYN_DASHBOARD_URL" ]; then
+              echo "**Evidence:** ${SYN_DASHBOARD_URL%/}/verdict?run=${RUN_ID} (live data may take ~5 minutes to refresh)"
+            fi
+          } > comment.md
+          gh pr comment "$pr" --repo "$REPO" --body-file comment.md

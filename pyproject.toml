@@ -11,7 +11,6 @@ requires-python = ">=3.10,<3.14"
 dependencies = [
     "numpy>=1.26,<3",
     "scipy>=1.11",
-    "torch>=2.2,<3",              # Twin + Lyapunov certificate
     "fastapi>=0.110",
     "uvicorn[standard]>=0.27",
     "pydantic>=2.6",
@@ -24,17 +23,19 @@ dependencies = [
 # fail on constrained environments -- hence the analytic basis fallback in
 # complexity/symbolic_regressor.py. Do not discover this the night before a deadline.
 symbolic = ["pysr>=0.18", "sympy>=1.12"]
+twin     = ["torch>=2.2,<3"]               # Twin + Lyapunov certificate (not used by the gate)
 graph    = ["torch-geometric>=2.5"]        # PHASE 2 only (hypernetwork)
 cache    = ["redis>=5.0"]                  # PHASE 2 only (delta-twinning)
 dev      = ["pytest>=8.0", "pytest-timeout>=2.2", "ruff>=0.3"]
-all      = ["project-syn[symbolic,graph,cache,dev]"]
+all      = ["project-syn[twin,symbolic,graph,cache,dev]"]
 
 [project.scripts]
 syn-gate = "gateway.ci_gate:main"
+syn-ci-run = "gateway.ci_run:main"
 
 [tool.setuptools]
 packages = ["shared", "telemetry", "synthesis", "stability", "complexity",
-            "orchestration", "gateway", "validation", "sample_app"]
+            "orchestration", "gateway", "validation", "sample_app", "analysis"]
 [tool.pytest.ini_options]
 testpaths = ["validation", "tests"]
 timeout = 600
