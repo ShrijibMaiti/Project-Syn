@@ -1,16 +1,20 @@
 {
   "run_id": "main-c92f5f8",
   "sha": "c92f5f8894d09f4db02a197051d412322b4c3bda",
-  "event": "push",
+  "event": "workflow_dispatch",
   "pr_number": null,
   "manifest": "syn.ci.json",
-  "started_at": 1790451715.7123678,
+  "started_at": 1790453364.125916,
   "verdict": "ok",
   "exit_code": 0,
   "runs": [
+    "demo-faulty",
+    "demo-clean",
+    "demo-warn",
+    "demo-unknown",
     "main-c92f5f8"
   ],
   "error": null,
   "kappa_floor": 0.0,
-  "finished_at": 1790451741.0961742
+  "finished_at": 1790453669.0883884
 }
