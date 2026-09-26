@@ -19,7 +19,7 @@ from sample_app.order_service import build_order_report, build_order_report_fixe
 
 # Every checkout writes one shared row. coherency_k is the per-waiter cost of
 # keeping that row consistent; 0.0 means concurrent checkouts do not interfere.
-CHECKOUT_DB = ContendedDB(coherency_k=0.0)
+CHECKOUT_DB = ContendedDB(coherency_k=1e-4)
 
 
 def monthly_report(n: int):
