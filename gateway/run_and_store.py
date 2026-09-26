@@ -1,9 +1,18 @@
 """Execute a full run and persist it for the dashboard.
 
-CI (or you) calls this. The API never measures -- it serves."""
+CI (or you) calls this. The API never measures -- it serves.
+
+Each stored run also records:
+  - manifest.refs  -- which code each probe name pointed at for THIS run
+                      (demo-faulty and demo-clean share names, not targets)
+  - code_graph     -- a static call graph of the probed packages, snapshotted
+                      at store time so each run's risk map shows its own code
+"""
 from __future__ import annotations
 import argparse
+import os
 
+from analysis.snapshot import manifest_refs, snapshot_graph
 from gateway import store
 from gateway.manifest_loader import find_manifest, load
 from orchestration.main_agent import MainAgent
@@ -24,8 +33,14 @@ def run_and_store(manifest_path=None, commit="workdir", serialize=True):
     agent = MainAgent(load(path), serialize=serialize)
     verdict, ctx = agent.run(commit=commit)
     cert = agent.certificate(verdict, ctx)
-    store.save_run(commit, verdict.to_dict(), cert, ctx.timings)
-    return verdict, cert          # <-- this line is missing
+
+    refs = manifest_refs(path)
+    project_root = os.path.dirname(os.path.abspath(path))
+    extra = {"manifest": {"path": os.path.basename(path), "refs": refs},
+             "code_graph": snapshot_graph(project_root, refs)}
+    store.save_run(commit, verdict.to_dict(), cert, ctx.timings, extra=extra)
+    return verdict, cert
+
 
 def store_blind(seed_list=(0, 1, 2)):
     from validation.blind_detection import run_blind, evaluate
@@ -39,7 +54,7 @@ def store_blind(seed_list=(0, 1, 2)):
                                     "false_positive_rate": sc.false_positive_rate,
                                     "precision": sc.precision, "accuracy": sc.accuracy},
                       "abstentions": unk,
-                                            "targets": [{"alias": a, "true_id": cid, "faulty": tf,
+                      "targets": [{"alias": a, "true_id": cid, "faulty": tf,
                                    "flagged": fl, "outcome": mark.strip(),
                                    "detail": d, "why": why,
                                    "trap": bool(getattr(truth[a], "trap", False))}

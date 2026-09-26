@@ -1,0 +1,328 @@
+/*
+ * Sensitivity + Risk Map. Built from the same tokens as every other view:
+ * monochrome, hairline, hatch = danger. Nothing here introduces a new colour.
+ */
+
+.an-section {
+  margin-top: 34px;
+}
+
+.an-state {
+  border: 1px dashed var(--syn-border-muted);
+  padding: 22px;
+  font-size: var(--syn-fs-body);
+  line-height: 1.7;
+  color: var(--syn-text-secondary);
+}
+.an-state b {
+  color: var(--syn-fg);
+  font-weight: 600;
+}
+.an-state--hatch {
+  background: var(--syn-hatch-band);
+}
+
+/* ---- plan: the minimum change ------------------------------------------ */
+.an-plan {
+  border: 1px solid var(--syn-border);
+}
+.an-plan-row {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  border-bottom: 1px solid var(--syn-border-hairline);
+}
+.an-plan-row:last-child {
+  border-bottom: none;
+}
+.an-plan-k {
+  padding: 16px 18px;
+  font-size: var(--syn-fs-tiny);
+  letter-spacing: var(--syn-track-label);
+  color: var(--syn-text-muted);
+  border-right: 1px solid var(--syn-border-hairline);
+}
+.an-plan-v {
+  padding: 14px 18px;
+  font-size: var(--syn-fs-body);
+  line-height: 1.7;
+}
+.an-plan-step {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 4px 0;
+}
+.an-plan-step-lens {
+  min-width: 170px;
+  color: var(--syn-text-secondary);
+}
+.an-plan-step-how {
+  color: var(--syn-fg);
+}
+.an-plan-foot {
+  font-size: var(--syn-fs-small);
+  color: var(--syn-text-dim);
+  margin-top: 6px;
+}
+
+/* ---- slider + readout ---------------------------------------------------- */
+.an-slider-row {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 0;
+  border-top: 1px solid var(--syn-border);
+}
+.an-slider-cell {
+  padding: 16px 18px;
+  border-right: 1px solid var(--syn-border);
+}
+.an-slider-label {
+  font-size: var(--syn-fs-tiny);
+  letter-spacing: var(--syn-track-label);
+  color: var(--syn-text-muted);
+  margin-bottom: 12px;
+}
+.an-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  background: var(--syn-grey-3d);
+  outline: none;
+  cursor: pointer;
+}
+.an-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 18px;
+  background: var(--syn-fg);
+  border: none;
+}
+.an-range::-moz-range-thumb {
+  width: 12px;
+  height: 18px;
+  background: var(--syn-fg);
+  border: none;
+  border-radius: 0;
+}
+.an-range:focus-visible {
+  outline: 1px dashed var(--syn-fg);
+  outline-offset: 6px;
+}
+.an-range-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--syn-fs-micro);
+  color: var(--syn-text-dim);
+  margin-top: 10px;
+}
+.an-readout {
+  padding: 14px 18px;
+}
+.an-readout-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.an-readout-value {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+/* ---- verdict chips ------------------------------------------------------- */
+.an-verdict {
+  display: inline-block;
+  font-size: var(--syn-fs-micro);
+  letter-spacing: var(--syn-track-label);
+  padding: 3px 8px;
+  border: 1px solid var(--syn-fg);
+  white-space: nowrap;
+}
+.an-verdict--refuse {
+  background: var(--syn-fg);
+  color: var(--syn-bg);
+}
+.an-verdict--warn {
+  border-style: dashed;
+}
+.an-verdict--ok {
+  border-color: var(--syn-grey-7a);
+  color: var(--syn-text-secondary);
+}
+.an-verdict--unknown {
+  background: var(--syn-hatch-band);
+  border-color: var(--syn-grey-7a);
+  color: var(--syn-text-secondary);
+}
+
+/* ---- lever cards --------------------------------------------------------- */
+.an-levers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+.an-lever {
+  border: 1px solid var(--syn-border);
+  padding: 18px;
+}
+.an-lever--lit {
+  border-color: var(--syn-fg);
+}
+.an-lever-kicker {
+  font-size: var(--syn-fs-tiny);
+  letter-spacing: var(--syn-track-label);
+  color: var(--syn-text-muted);
+  margin-bottom: 10px;
+}
+.an-lever-value {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.an-lever-body {
+  font-size: var(--syn-fs-small);
+  line-height: 1.7;
+  color: var(--syn-text-secondary);
+}
+
+/* ---- method / roadmap notes ---------------------------------------------- */
+.an-notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+.an-note {
+  border: 1px dashed var(--syn-border-muted);
+  padding: 20px;
+}
+.an-note-label {
+  font-size: var(--syn-fs-tiny);
+  letter-spacing: var(--syn-track-label);
+  color: var(--syn-text-muted);
+  margin-bottom: 12px;
+}
+.an-note-body {
+  font-size: var(--syn-fs-small);
+  line-height: 1.75;
+  color: var(--syn-text-secondary);
+}
+.an-note-body li {
+  margin-bottom: 6px;
+}
+.an-note-body ul {
+  margin: 0;
+  padding-left: 16px;
+}
+.an-note--roadmap {
+  background: var(--syn-hatch-band);
+}
+
+/* ---- risk map ------------------------------------------------------------ */
+.an-graph-scroll {
+  overflow-x: auto;
+  padding: 12px 0 6px;
+}
+.an-graph-node {
+  cursor: pointer;
+}
+.an-graph-node:focus {
+  outline: none;
+}
+.an-graph-node:focus-visible rect.an-node-box {
+  stroke-dasharray: 3 2;
+}
+.an-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+.an-detail-panel {
+  border: 1px solid var(--syn-border);
+  padding: 18px;
+  min-width: 0;
+}
+.an-detail-title {
+  font-size: 16px;
+  font-weight: 500;
+  word-break: break-all;
+  margin-bottom: 4px;
+}
+.an-detail-sub {
+  font-size: var(--syn-fs-small);
+  color: var(--syn-text-dim);
+  margin-bottom: 14px;
+  word-break: break-all;
+}
+.an-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--syn-fs-small);
+  line-height: 1.9;
+  color: var(--syn-text-secondary);
+}
+.an-list button {
+  all: unset;
+  cursor: pointer;
+  border-bottom: 1px dotted var(--syn-grey-5c);
+}
+.an-list button:hover,
+.an-list button:focus-visible {
+  color: var(--syn-fg);
+  border-bottom-color: var(--syn-fg);
+}
+.an-list-empty {
+  color: var(--syn-text-dim);
+}
+.an-subhead {
+  font-size: var(--syn-fs-tiny);
+  letter-spacing: var(--syn-track-label);
+  color: var(--syn-text-muted);
+  margin: 14px 0 6px;
+}
+.an-probe-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 110px;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--syn-border-hairline);
+  font-size: var(--syn-fs-small);
+  line-height: 1.7;
+  align-items: start;
+}
+.an-probe-row:last-child {
+  border-bottom: none;
+}
+.an-callout {
+  margin-top: 6px;
+  color: var(--syn-fg);
+}
+.an-toggle-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 760px) {
+  .an-plan-row,
+  .an-slider-row {
+    grid-template-columns: 1fr;
+  }
+  .an-plan-k,
+  .an-slider-cell {
+    border-right: none;
+    border-bottom: 1px solid var(--syn-border-hairline);
+  }
+  .an-probe-row {
+    grid-template-columns: 1fr;
+  }
+  .an-plan-step {
+    flex-direction: column;
+    gap: 2px;
+  }
+}

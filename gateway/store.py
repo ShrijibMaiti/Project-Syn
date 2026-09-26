@@ -1,4 +1,4 @@
-﻿"""Persistent run store.
+"""Persistent run store.
 
 Probes take minutes; the frontend cannot block on them. Runs are executed once
 (by CI or manually), persisted here, and served instantly to the UI."""
@@ -16,11 +16,16 @@ def _path(commit: str) -> str:
     return os.path.join(STORE_DIR, f"{safe}.json")
 
 
-def save_run(commit, verdict_dict, certificate, timings=None) -> str:
+def save_run(commit, verdict_dict, certificate, timings=None,
+             extra: Optional[Dict[str, Any]] = None) -> str:
+    """`extra` carries run-scoped artifacts beyond the verdict: the manifest
+    targets that were probed and the code-graph snapshot for this commit."""
     os.makedirs(STORE_DIR, exist_ok=True)
     payload = {"commit": commit, "created_at": time.time(),
                "verdict": verdict_dict, "certificate": certificate,
                "timings": timings or {}}
+    if extra:
+        payload.update(extra)
     p = _path(commit)
     with open(p, "w", encoding="utf-8") as fh:
         json.dump(payload, fh, indent=2, default=str)

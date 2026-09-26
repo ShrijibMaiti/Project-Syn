@@ -1,10 +1,11 @@
-﻿"""FastAPI app: dashboard API for the Manifold Visualizer."""
+"""FastAPI app: dashboard API for the Manifold Visualizer."""
 from __future__ import annotations
 import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from gateway.analysis_api import router as analysis_router
 from gateway.dashboard_backend import router as dashboard_router
 
 app = FastAPI(title="SYN", description="Guardian of the production manifold")
@@ -20,6 +21,7 @@ app.add_middleware(
 )
 
 app.include_router(dashboard_router)
+app.include_router(analysis_router)
 
 
 @app.get("/health")

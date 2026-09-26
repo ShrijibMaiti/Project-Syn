@@ -16,7 +16,7 @@ kappa > 0  <=>  throughput retrograde  <=>  a separatrix exists.
 NOTATION: N is CONCURRENCY throughout this module. Lowercase n is reserved for
 INPUT SIZE (the complexity lens). Every user-facing string here says N.
 
---- SIX FIXES, EACH FOUND BY MEASUREMENT ---
+--- SEVEN FIXES, EACH FOUND BY MEASUREMENT OR BY SWEEPING THE LAW ---
 
 1. NESTED F-TEST, NOT A POINT ESTIMATE. sigma*N and kappa*N^2 are degenerate over
    a narrow range; the fitter absorbs LINEAR growth into the QUADRATIC term.
@@ -43,6 +43,10 @@ INPUT SIZE (the complexity lens). Every user-facing string here says N.
    kappa=5.1e-5 at p=1.3e-4 -- 2.2x that floor. Statistical evidence is therefore
    necessary but not sufficient: kappa must also clear the calibrated floor by
    FLOOR_MARGIN, or it is the machine being measured, not the target.
+
+7. LOAD ABOVE CAPACITY IS A REFUSAL, NOT A PASS. With no separatrix found, the
+   gate used to answer OK even when the offered load exceeded peak throughput --
+   the one case where collapse is certain. Found by sweeping load past capacity.
 
 R^2 IS NOT A VALIDITY CHECK: R^2=0.99 was observed alongside a 100% kappa error.
 """
@@ -310,6 +314,15 @@ def verdict(fit: CapacityFit, load: float, kappa_floor="auto"):
                               f"scheduler overhead. No trap reported.")
     t = analyse_trap(fit, load)
     if not t.bistable:
+        # No separatrix has two causes with opposite meanings. Below the peak
+        # the load simply never reaches the cliff. AT OR ABOVE the peak there is
+        # no healthy equilibrium at all: the queue can only grow. Found by the
+        # sensitivity engine sweeping load past capacity -- the gate used to PASS
+        # an operating load above peak throughput.
+        if fit.peak_throughput is not None and load >= fit.peak_throughput:
+            return RiskLevel.REFUSE, (f"offered load {load:g}/s is at or above peak "
+                                      f"capacity {fit.peak_throughput:.0f}/s at "
+                                      f"N={fit.peak_n:.0f}: no healthy equilibrium exists")
         return RiskLevel.OK, f"coherency present but no separatrix at load {load:g}"
     if t.headroom <= HEADROOM_REFUSE:
         return RiskLevel.REFUSE, (f"separatrix at N={t.separatrix:.1f}, operating at "
