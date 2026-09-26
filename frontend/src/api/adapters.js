@@ -242,6 +242,7 @@ export function adaptEvidence(api, fallback) {
   if (!api.adequate) outcome = 'INSUFFICIENT';
   else if (!api.evidence) outcome = 'NONE';
   else if (api.exceeds_floor === false) outcome = 'NOISE';
+  else if (api.beyond_range) outcome = 'BEYOND';
   else outcome = 'TRAP';
 
   const selectedB = outcome === 'TRAP';
@@ -267,6 +268,10 @@ export function adaptEvidence(api, fallback) {
       badge: 'INDISTINGUISHABLE FROM NOISE',
       text: `The F-test finds a coherency term (p = ${sci(api.p_value)}), but κ = ${sci(api.kappa)} is only ${ratioText} the instrument's own noise floor (κ = ${sci(floor)}, measured on a no-op target). It cannot be separated from OS scheduler overhead, so it is not reported as a trap.`,
     },
+    BEYOND: {
+      badge: 'CLIFF BEYOND THE MEASURED RANGE',
+      text: `The F-test finds a coherency term (p = ${sci(api.p_value)}; κ = ${sci(api.kappa)}), but the fitted throughput peak sits at N ≈ ${int(api.peak_n)} — more than 2× the largest concurrency measured (N = ${int(nMax)}). A cliff that far out is an extrapolation of the fit, not something the measurement came close to observing, so it is not reported as a trap.`,
+    },
     INSUFFICIENT: {
       badge: 'INSUFFICIENT EVIDENCE',
       text: `Only ${int(levels)} levels were sampled up to N = ${int(nMax)} (minimum ${T.minLevels} levels to N = ${T.minNMax}). Over too narrow a range, a small κ is indistinguishable from zero — a null result here is not evidence of absence. This lens cannot decide.`,
@@ -276,6 +281,7 @@ export function adaptEvidence(api, fallback) {
     TRAP: `EVIDENCE OF A TRAP (p < ${T.alpha}, κ > ${T.floorMargin}× NOISE FLOOR)`,
     NONE: `NO EVIDENCE OF A TRAP (p ≥ ${T.alpha})`,
     NOISE: `INDISTINGUISHABLE FROM NOISE (κ < ${T.floorMargin}× FLOOR)`,
+    BEYOND: 'CLIFF BEYOND THE MEASURED RANGE (PEAK > 2× N MEASURED)',
     INSUFFICIENT: `INSUFFICIENT EVIDENCE (< ${T.minLevels} LEVELS OR N < ${T.minNMax})`,
   };
 

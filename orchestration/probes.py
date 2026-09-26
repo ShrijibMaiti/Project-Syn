@@ -62,7 +62,7 @@ def complexity_probe(t: ComplexityTarget) -> ProbeResult:
 def stability_probe(t: StabilityTarget) -> ProbeResult:
     from stability.capacity_curve import (measure_latency_curve, fit_capacity,
                                           analyse_trap, verdict, load_kappa_floor,
-                                          floor_comparison)
+                                          floor_comparison, cliff_in_range)
     try:
         rows = measure_latency_curve(t.call, t.levels,
                                      samples_per_level=t.samples_per_level,
@@ -95,6 +95,13 @@ def stability_probe(t: StabilityTarget) -> ProbeResult:
     if exceeds is False:
         # Statistically real, but inside the instrument's own noise: not the target.
         _, why = verdict(f, 0.0, kappa_floor=floor)
+        return ProbeResult(ProbeKind.STABILITY, RiskLevel.OK,
+                           f"{t.name}: {why}", evidence=ev)
+    ev["beyond_range"] = not cliff_in_range(f.peak_n, f.n_max)
+    if ev["beyond_range"]:
+        # Statistically real, but the cliff is far outside what was measured.
+        _, why = verdict(f, 0.0, kappa_floor=floor)
+        ev.update({"peak_n": f.peak_n, "peak_throughput": f.peak_throughput})
         return ProbeResult(ProbeKind.STABILITY, RiskLevel.OK,
                            f"{t.name}: {why}", evidence=ev)
     load = t.operating_load if t.operating_load is not None else 0.85 * f.peak_throughput

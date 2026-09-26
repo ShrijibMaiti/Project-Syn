@@ -33,7 +33,8 @@ import math
 from itertools import product
 from typing import Any, Dict, List, Optional, Tuple
 
-from stability.capacity_curve import FLOOR_MARGIN, HEADROOM_REFUSE, HEADROOM_WARN
+from stability.capacity_curve import (EXTRAPOLATION_LIMIT, FLOOR_MARGIN, HEADROOM_REFUSE,
+                                      HEADROOM_WARN)
 
 EXP_WARN, EXP_REFUSE = 1.2, 1.7      # must match orchestration/probes.py
 DEFAULT_CEILING_S = 30.0             # gateway timeout assumed for ceiling crossings
@@ -166,6 +167,14 @@ def stability_sensitivity(e: Dict[str, Any], risk: Optional[str]) -> Dict[str, A
                            f"({_num(e.get('floor_ratio')) or 0:.1f}x, needs {FLOOR_MARGIN:g}x), "
                            f"so the gate reports no trap and there is nothing to lever.")}
 
+    n_max = _num(e.get("n_max_measured"))
+    if e.get("beyond_range"):
+        return {**common, "mode": "beyond_range",
+                "reason": (f"The kappa term is statistically real but its fitted peak lies "
+                           f"beyond {EXTRAPOLATION_LIMIT:g}x the largest concurrency measured "
+                           f"(N={n_max or 0:.0f}). The gate does not act on a cliff it would "
+                           f"have to extrapolate that far, so there is nothing to lever.")}
+
     n_star, capacity_exact = peak(base, sigma, kappa)
     # The gate tests load against the peak IT found on its integer grid (stored
     # with the run); fall back to the exact peak for runs stored without it.
@@ -184,7 +193,9 @@ def stability_sensitivity(e: Dict[str, Any], risk: Optional[str]) -> Dict[str, A
 
     # Kappa thresholds at the CURRENT operating load (base, sigma held fixed).
     def verdict_at_kappa(k: float) -> str:
-        _, cap_k = peak(base, sigma, k) if k > 0 else (None, None)
+        n_k, cap_k = peak(base, sigma, k) if k > 0 else (None, None)
+        if n_k is not None and n_max and n_k > EXTRAPOLATION_LIMIT * n_max:
+            return "ok"     # the gate's extrapolation limit, as in verdict()
         return gate_state(load_now, base, sigma, k, cap_k)["verdict"]
 
     kappa_warn_max = _max_kappa(lambda k: verdict_at_kappa(k) != "refuse", kappa)

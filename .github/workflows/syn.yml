@@ -43,6 +43,7 @@ jobs:
           python tests/check_17_noise_floor.py
           python tests/check_18_sensitivity.py
           python tests/check_19_riskmap.py
+          python tests/check_20_extrapolation.py
 
   gate:
     name: SYN gate

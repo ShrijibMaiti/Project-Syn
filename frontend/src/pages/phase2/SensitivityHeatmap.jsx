@@ -154,6 +154,7 @@ function StabilityBlock({ s }) {
       inadequate: 'NO COUNTERFACTUAL — THE MEASUREMENT COULD NOT DECIDE',
       no_coherency: 'NO CLIFF TO MOVE AWAY FROM',
       below_floor: 'INSIDE THE INSTRUMENT’S NOISE FLOOR',
+      beyond_range: 'CLIFF BEYOND THE MEASURED RANGE',
       missing: 'LAW NOT STORED WITH THIS RUN',
     };
     return <ModeState title={titles[s.mode] ?? s.mode.toUpperCase()} reason={s.reason} hatch={s.mode === 'inadequate'} />;

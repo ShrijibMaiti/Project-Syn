@@ -131,6 +131,8 @@ def evidence(commit: str = "latest", target: str = "default"):
         "trap": s["trap"],
         "noise_floor": floor,
         "floor_ratio": e.get("floor_ratio"),
+        "beyond_range": bool(e.get("beyond_range")),
+        "peak_n": e.get("peak_n"),
         "exceeds_floor": (e["exceeds_floor"] if e.get("exceeds_floor") is not None
                           else None if not floor or k is None
                           else bool(k > floor * 10)),

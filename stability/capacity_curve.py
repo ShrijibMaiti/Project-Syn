@@ -72,6 +72,20 @@ MIN_LEVELS = 16
 MIN_NMAX = 256
 FAIL_FAST_ERRORS = 50  # consecutive errors with zero successes -> the target is broken
 FLOOR_MARGIN = 10.0    # a real trap must exceed the instrument's own kappa by this factor
+EXTRAPOLATION_LIMIT = 2.0  # a cliff is gated only if the fitted peak lies within 2x the
+                           # largest concurrency actually measured (see cliff_in_range)
+
+
+def cliff_in_range(peak_n, n_max) -> bool:
+    """True when the fitted throughput peak lies within EXTRAPOLATION_LIMIT x the
+    largest concurrency measured. Beyond that the 'cliff' is an extrapolation of
+    a fit far outside its data -- measured on a GitHub runner, a flat 10 ms
+    service with no shared state fitted kappa~4e-7 at p<0.01 (scheduler jitter),
+    putting its 'peak' at N~1,800 when only N<=256 was measured. SYN does not
+    gate on a cliff it has not come close to observing."""
+    if peak_n is None or not n_max:
+        return True
+    return peak_n <= EXTRAPOLATION_LIMIT * n_max
 
 
 def load_kappa_floor() -> float:
@@ -312,6 +326,12 @@ def verdict(fit: CapacityFit, load: float, kappa_floor="auto"):
                               f"kappa={fit.kappa:.2e} is only {ratio:.1f}x the instrument's "
                               f"noise floor (kappa={floor:.2e}); indistinguishable from OS "
                               f"scheduler overhead. No trap reported.")
+    if not cliff_in_range(fit.peak_n, fit.n_max):
+        return RiskLevel.OK, (f"coherency term detected (p={fit.p_value:.1e}, "
+                              f"kappa={fit.kappa:.2e}) but its fitted peak at "
+                              f"N={fit.peak_n:.0f} lies beyond {EXTRAPOLATION_LIMIT:g}x the "
+                              f"largest concurrency measured (N={fit.n_max}); the cliff is "
+                              f"an extrapolation, not an observation. No trap reported.")
     t = analyse_trap(fit, load)
     if not t.bistable:
         # No separatrix has two causes with opposite meanings. Below the peak

@@ -80,6 +80,14 @@ def _stability_line(e: dict) -> str:
                 f"{kappa:.2e} is only {r_txt} the instrument's noise floor{f_txt} — "
                 f"indistinguishable from OS scheduler overhead; no trap reported")
 
+    # 3b. evidence, but the fitted cliff lies far beyond the measured range
+    if e.get("beyond_range"):
+        peak_n, nmax = _num(e.get("peak_n")), _num(e.get("n_max_measured"))
+        where = (f"fitted peak at N={peak_n:.0f}, beyond 2x the measured N={nmax:.0f}"
+                 if peak_n is not None and nmax is not None else "fitted peak far beyond the measured range")
+        return (f"- `{target}`: coherency term detected ({p_txt}, kappa {kappa:.2e}) but "
+                f"its {where} — an extrapolation, not an observed cliff; no trap reported")
+
     # 4. evidence above the floor: print only what was actually computed
     parts = [f"kappa **{kappa:.2e}** ({p_txt})"]
     peak_tp, peak_n = _num(e.get("peak_throughput")), _num(e.get("peak_n"))
@@ -127,7 +135,8 @@ def render_markdown(v: Verdict, commit: str, timings=None) -> str:
                 fixes.append(f"- `{e.get('target')}` (superlinear): reduce the complexity "
                              "class (index the join, batch the queries).")
         for e in stab:
-            if e.get("evidence") and e.get("exceeds_floor") is not False:
+            if (e.get("evidence") and e.get("exceeds_floor") is not False
+                    and not e.get("beyond_range")):
                 fixes.append(f"- `{e.get('target')}` (coherency cost): reduce shared-resource "
                              "contention, or cap concurrency below the separatrix.")
         if fixes:
