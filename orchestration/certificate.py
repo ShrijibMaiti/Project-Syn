@@ -119,11 +119,19 @@ def render_markdown(v: Verdict, commit: str, timings=None) -> str:
     out += ["### Findings"] + [f"- {r}" for r in v.reasons]
 
     if v.risk is RiskLevel.REFUSE:
-        out += ["", "### Remediation",
-                "- Superlinear path: reduce the complexity class (index the join, "
-                "batch the queries).",
-                "- Coherency cost: reduce shared-resource contention, or cap "
-                "concurrency below the separatrix."]
+        # Only the lenses that actually flagged get a remedy: advice for a
+        # problem this run did not measure would be noise on the certificate.
+        fixes = []
+        for e in comp:
+            if e.get("superlinear"):
+                fixes.append(f"- `{e.get('target')}` (superlinear): reduce the complexity "
+                             "class (index the join, batch the queries).")
+        for e in stab:
+            if e.get("evidence") and e.get("exceeds_floor") is not False:
+                fixes.append(f"- `{e.get('target')}` (coherency cost): reduce shared-resource "
+                             "contention, or cap concurrency below the separatrix.")
+        if fixes:
+            out += ["", "### Remediation"] + fixes
     elif v.risk is RiskLevel.UNKNOWN:
         out += ["", "### What would settle it",
                 f"- Widen the sweep to >={MIN_LEVELS} concurrency levels reaching "
