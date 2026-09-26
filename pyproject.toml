@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project-syn"
+version = "0.1.0"
+description = "SYN — guardian of the production manifold"
+requires-python = ">=3.10,<3.14"
+
+dependencies = [
+    "numpy>=1.26,<3",
+    "scipy>=1.11",
+    "torch>=2.2,<3",              # Twin + Lyapunov certificate
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.6",
+    "requests>=2.31",
+    "networkx>=3.2",
+]
+
+[project.optional-dependencies]
+# PySR pulls a Julia backend. First run precompiles for several minutes and can
+# fail on constrained environments -- hence the analytic basis fallback in
+# complexity/symbolic_regressor.py. Do not discover this the night before a deadline.
+symbolic = ["pysr>=0.18", "sympy>=1.12"]
+graph    = ["torch-geometric>=2.5"]        # PHASE 2 only (hypernetwork)
+cache    = ["redis>=5.0"]                  # PHASE 2 only (delta-twinning)
+dev      = ["pytest>=8.0", "pytest-timeout>=2.2", "ruff>=0.3"]
+all      = ["project-syn[symbolic,graph,cache,dev]"]
+
+[project.scripts]
+syn-gate = "gateway.ci_gate:main"
+
+[tool.setuptools]
+packages = ["shared", "telemetry", "synthesis", "stability", "complexity",
+            "orchestration", "gateway", "validation", "sample_app"]
+[tool.pytest.ini_options]
+testpaths = ["validation", "tests"]
+timeout = 600
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

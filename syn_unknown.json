@@ -1,0 +1,15 @@
+{
+  "syn": {
+    "complexity": [
+      {"name": "order_report",
+       "target": "sample_app.order_service:build_order_report_fixed",
+       "n_min": 20, "n_max": 20000, "points": 10}
+    ],
+    "stability": [
+      {"name": "db_access",
+       "target": "sample_app.contended_db:CONTENDED_DB.call",
+       "samples_per_level": 25, "repeats": 2,
+       "levels": [1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64]}
+    ]
+  }
+}

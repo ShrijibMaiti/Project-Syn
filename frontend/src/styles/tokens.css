@@ -1,0 +1,77 @@
+/* ------------------------------------------------------------------
+   SYN design tokens — monochrome ASCII system.
+   Pure #000 / #FFF with a tight grey ramp. No hue anywhere: every
+   emphasis in this system is carried by weight, border or inversion,
+   never by colour.
+   ------------------------------------------------------------------ */
+
+:root {
+  /* --- ground & ink ---------------------------------------------- */
+  --syn-bg: #000;
+  --syn-fg: #fff;
+
+  /* --- grey ramp (darkest → lightest) ----------------------------- */
+  --syn-grey-08: #080808; /* trapped table rows */
+  --syn-grey-0a: #0a0a0a; /* hero grid rules, selected model panel */
+  --syn-grey-0c: #0c0c0c; /* sampled-range plot fill */
+  --syn-grey-0d: #0d0d0d; /* hatch ground, trap rows */
+  --syn-grey-0f: #0f0f0f; /* active nav tab ground */
+  --syn-grey-11: #111; /* hover ground, peak row, banner hatch */
+  --syn-grey-13: #131313; /* hairline dividers, meter tracks */
+  --syn-grey-17: #171717; /* UNKNOWN verdict hatch */
+  --syn-grey-1a: #1a1a1a; /* dashed dividers, y gridlines */
+  --syn-grey-1f: #1f1f1f; /* subtle frames */
+  --syn-grey-26: #262626; /* standard border */
+  --syn-grey-2b: #2b2b2b; /* trapped-region hatch stroke */
+  --syn-grey-3d: #3d3d3d; /* muted border, secondary CTA */
+  --syn-grey-4d: #4d4d4d; /* nav numerals, status labels */
+  --syn-grey-5c: #5c5c5c; /* dim text, axis ticks */
+  --syn-grey-7a: #7a7a7a; /* muted text, section kickers */
+  --syn-grey-8a: #8a8a8a; /* requirement markers */
+  --syn-grey-a3: #a3a3a3; /* secondary body text */
+
+  /* --- semantic surfaces ------------------------------------------ */
+  --syn-border: var(--syn-grey-26);
+  --syn-border-hairline: var(--syn-grey-13);
+  --syn-border-dashed: var(--syn-grey-1a);
+  --syn-border-muted: var(--syn-grey-3d);
+  --syn-text-muted: var(--syn-grey-7a);
+  --syn-text-dim: var(--syn-grey-5c);
+  --syn-text-secondary: var(--syn-grey-a3);
+
+  /* --- type ------------------------------------------------------- */
+  --syn-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --syn-font-pixel: 'Silkscreen', 'JetBrains Mono', monospace;
+
+  /**
+   * Box-drawing art (schematics, the SYN wordmark, the concept sketches) must
+   * not use --syn-font-mono. The Google Fonts build of JetBrains Mono is
+   * subsetted to latin/cyrillic/greek and carries no U+2500–257F box drawing or
+   * U+2580–259F blocks, so those glyphs fall back to a system font while the
+   * letters beside them stay in JBM. Two advance widths on one line means the
+   * error accumulates and the closing border lands in a different column on
+   * every row. This stack keeps a whole art block in one font that has the
+   * glyphs, so the columns line up.
+   */
+  --syn-font-ascii: ui-monospace, 'Cascadia Mono', Consolas, 'DejaVu Sans Mono', 'Liberation Mono',
+    Menlo, monospace;
+
+  --syn-fs-micro: 9px;
+  --syn-fs-tiny: 10px;
+  --syn-fs-small: 11px;
+  --syn-fs-body: 12px;
+  --syn-fs-base: 13px;
+  --syn-fs-lead: 14px;
+
+  /* --- tracking (this system leans hard on letter-spacing) --------- */
+  --syn-track-tight: -0.02em;
+  --syn-track-label: 0.14em;
+  --syn-track-head: 0.2em;
+  --syn-track-kicker: 0.22em;
+
+  /* --- structure -------------------------------------------------- */
+  --syn-page-max: 1180px;
+  --syn-landing-max: 1080px;
+  --syn-page-pad-x: 40px;
+  --syn-hatch-band: repeating-linear-gradient(45deg, var(--syn-grey-0d) 0 8px, #000 8px 16px);
+}

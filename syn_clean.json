@@ -1,0 +1,1 @@
+{"syn": {"complexity": [{"name": "order_report", "target": "sample_app.order_service:build_order_report_fixed", "n_min": 20, "n_max": 20000, "points": 10}], "stability": [{"name": "db_access", "target": "sample_app.contended_db:CLEAN_DB.call", "samples_per_level": 25, "repeats": 2}]}}

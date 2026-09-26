@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Node / Vite
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
+# Local artifacts
+*.bak
+*.zip
+data/runs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
