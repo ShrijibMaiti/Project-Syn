@@ -1,0 +1,16 @@
+{
+  "run_id": "pr-1-629dce2",
+  "sha": "629dce252925469be9c9fb6ed05b8d1af2073212",
+  "event": "pull_request",
+  "pr_number": 1,
+  "manifest": "syn.ci.json",
+  "started_at": 1790450840.0567324,
+  "verdict": "refuse",
+  "exit_code": 1,
+  "runs": [
+    "pr-1-629dce2"
+  ],
+  "error": null,
+  "kappa_floor": 0.0,
+  "finished_at": 1790450873.5104628
+}
