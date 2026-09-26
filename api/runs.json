@@ -1,0 +1,1 @@
+{"runs":[{"commit":"main-6040fd4","created_at":1790446839.930677,"risk":"ok","reasons":["[complexity/ok] monthly_report: exponent 0.74 CI[0.64,0.85] (2.8 decades)","[stability/ok] checkout_db: no evidence of coherency (p=1.000); latency growth is consistent with pure contention (sigma=0.0000). No trap possible."]}]}

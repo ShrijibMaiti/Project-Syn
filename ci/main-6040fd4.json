@@ -1,0 +1,16 @@
+{
+  "run_id": "main-6040fd4",
+  "sha": "6040fd4e32c941b5a7e60254494a1d1d27e742af",
+  "event": "push",
+  "pr_number": null,
+  "manifest": "syn.ci.json",
+  "started_at": 1790446818.740635,
+  "verdict": "ok",
+  "exit_code": 0,
+  "runs": [
+    "main-6040fd4"
+  ],
+  "error": null,
+  "kappa_floor": 0.0,
+  "finished_at": 1790446839.931968
+}
