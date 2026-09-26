@@ -1,0 +1,1134 @@
+{
+  "commit": "main-31cd368",
+  "created_at": 1790455930.219404,
+  "verdict": {
+    "risk": "ok",
+    "reasons": [
+      "[complexity/ok] monthly_report: exponent 0.86 CI[0.79,0.93] (2.8 decades)",
+      "[stability/ok] checkout_db: coherency term detected (p=5.9e-04, kappa=2.25e-07) but its fitted peak at N=2110 lies beyond 2x the largest concurrency measured (N=256); the cliff is an extrapolation, not an observation. No trap reported."
+    ],
+    "probes": [
+      {
+        "kind": "complexity",
+        "risk": "ok",
+        "summary": "monthly_report: exponent 0.86 CI[0.79,0.93] (2.8 decades)",
+        "evidence": {
+          "target": "monthly_report",
+          "exponent": 0.8600668639306749,
+          "exponent_ci": [
+            0.7885386457566926,
+            0.9315950821046571
+          ],
+          "class": "O(n log n)",
+          "expression": "4.01077e-08*n*log2(n) + 0.000318128",
+          "r2": 0.9996029985457153,
+          "superlinear": false,
+          "confidence": 0.27770483202970186,
+          "decades": 2.7781512503836434,
+          "n_min": 20.0,
+          "n_max": 12000.0,
+          "rows": [
+            {
+              "n": 20.0,
+              "elapsed_s": 0.0002709709999635379,
+              "t_min": 0.00026767500003188616,
+              "t_max": 0.00029444500000863627,
+              "spread": 1.1000093395855466
+            },
+            {
+              "n": 40.0,
+              "elapsed_s": 0.0002822420000256898,
+              "t_min": 0.0002742270000339886,
+              "t_max": 0.00030281100004003747,
+              "spread": 1.1042348127737462
+            },
+            {
+              "n": 82.0,
+              "elapsed_s": 0.00031881199998906595,
+              "t_min": 0.00031197900000279333,
+              "t_max": 0.00034088400002474373,
+              "spread": 1.0926504669278754
+            },
+            {
+              "n": 168.0,
+              "elapsed_s": 0.0003766410000025644,
+              "t_min": 0.0003723919999742975,
+              "t_max": 0.00040641599997570665,
+              "spread": 1.0913660873589053
+            },
+            {
+              "n": 343.0,
+              "elapsed_s": 0.00041238800002929565,
+              "t_min": 0.0004080799999996998,
+              "t_max": 0.00045695199997908276,
+              "spread": 1.1197608311591327
+            },
+            {
+              "n": 698.0,
+              "elapsed_s": 0.0005916860000070301,
+              "t_min": 0.0005884600000172213,
+              "t_max": 0.0006546150000303896,
+              "spread": 1.1124205553669446
+            },
+            {
+              "n": 1422.0,
+              "elapsed_s": 0.0009647200000131306,
+              "t_min": 0.0009592600000019047,
+              "t_max": 0.0010021009999832131,
+              "spread": 1.0446604674240805
+            },
+            {
+              "n": 2896.0,
+              "elapsed_s": 0.0017338810000069316,
+              "t_min": 0.0017224300000293624,
+              "t_max": 0.00180790199999592,
+              "spread": 1.0496229164407846
+            },
+            {
+              "n": 5895.0,
+              "elapsed_s": 0.003298993999976574,
+              "t_min": 0.003278566000005867,
+              "t_max": 0.003362745000003997,
+              "spread": 1.0256755544948553
+            },
+            {
+              "n": 12000.0,
+              "elapsed_s": 0.0068103589999850556,
+              "t_min": 0.006513348999988011,
+              "t_max": 0.007005497000022842,
+              "spread": 1.0755599001428815
+            }
+          ]
+        },
+        "error": null
+      },
+      {
+        "kind": "stability",
+        "risk": "ok",
+        "summary": "checkout_db: coherency term detected (p=5.9e-04, kappa=2.25e-07) but its fitted peak at N=2110 lies beyond 2x the largest concurrency measured (N=256); the cliff is an extrapolation, not an observation. No trap reported.",
+        "evidence": {
+          "target": "checkout_db",
+          "kappa": 2.2451169203694246e-07,
+          "kappa_ci": [
+            5.572863002462125e-08,
+            2.7124672921511534e-07
+          ],
+          "p_value": 0.0005927327634637214,
+          "sigma": 1.4666501949869051e-26,
+          "evidence": true,
+          "adequate": true,
+          "raw_peak_tp": 24973.954165663097,
+          "raw_peak_n": 256.0,
+          "base": 0.01007892942662241,
+          "r2": 0.7653458936748792,
+          "n_levels": 20,
+          "n_max_measured": 256,
+          "kappa_floor": null,
+          "floor_ratio": null,
+          "exceeds_floor": null,
+          "rows": [
+            {
+              "n": 1.0,
+              "R": 0.0101171609999966,
+              "throughput": 98.84195773896809,
+              "rounds": 2,
+              "spread": 1.000425506293334
+            },
+            {
+              "n": 2.0,
+              "R": 0.010116667500000176,
+              "throughput": 197.69355867433273,
+              "rounds": 2,
+              "spread": 1.000594344564715
+            },
+            {
+              "n": 3.0,
+              "R": 0.010111647750008501,
+              "throughput": 296.6875502558401,
+              "rounds": 2,
+              "spread": 1.0004917816168128
+            },
+            {
+              "n": 4.0,
+              "R": 0.010077529000014351,
+              "throughput": 396.92269801399766,
+              "rounds": 2,
+              "spread": 1.0004823773958373
+            },
+            {
+              "n": 6.0,
+              "R": 0.01007249200000615,
+              "throughput": 595.68178361386,
+              "rounds": 2,
+              "spread": 1.0000870726160953
+            },
+            {
+              "n": 8.0,
+              "R": 0.010078966750000973,
+              "throughput": 793.7321551337817,
+              "rounds": 2,
+              "spread": 1.0002147772201047
+            },
+            {
+              "n": 12.0,
+              "R": 0.010073852250002346,
+              "throughput": 1191.2027000393225,
+              "rounds": 2,
+              "spread": 1.0001482660941166
+            },
+            {
+              "n": 16.0,
+              "R": 0.010074647999985586,
+              "throughput": 1588.1448165755162,
+              "rounds": 2,
+              "spread": 1.0002267333712629
+            },
+            {
+              "n": 20.0,
+              "R": 0.01007850575000191,
+              "throughput": 1984.4211529071372,
+              "rounds": 2,
+              "spread": 1.0006482724004542
+            },
+            {
+              "n": 24.0,
+              "R": 0.010072632000017734,
+              "throughput": 2382.6940168128594,
+              "rounds": 2,
+              "spread": 1.0002531932891394
+            },
+            {
+              "n": 32.0,
+              "R": 0.01008388075000255,
+              "throughput": 3173.3814384895327,
+              "rounds": 2,
+              "spread": 1.0012378389831218
+            },
+            {
+              "n": 40.0,
+              "R": 0.010079700499986188,
+              "throughput": 3968.371877721447,
+              "rounds": 2,
+              "spread": 1.000118760578959
+            },
+            {
+              "n": 48.0,
+              "R": 0.01008165925001947,
+              "throughput": 4761.121042640605,
+              "rounds": 2,
+              "spread": 1.0003294147137498
+            },
+            {
+              "n": 64.0,
+              "R": 0.010083954999998923,
+              "throughput": 6346.716144608622,
+              "rounds": 2,
+              "spread": 1.0002366415024695
+            },
+            {
+              "n": 80.0,
+              "R": 0.010079280999988782,
+              "throughput": 7937.074082971696,
+              "rounds": 2,
+              "spread": 1.00037073006416
+            },
+            {
+              "n": 96.0,
+              "R": 0.010083029749992534,
+              "throughput": 9520.947808377843,
+              "rounds": 2,
+              "spread": 1.0008697099902912
+            },
+            {
+              "n": 128.0,
+              "R": 0.010082017000030419,
+              "throughput": 12695.872264410365,
+              "rounds": 2,
+              "spread": 1.0001797420932672
+            },
+            {
+              "n": 160.0,
+              "R": 0.010092661999976826,
+              "throughput": 15853.101986410262,
+              "rounds": 2,
+              "spread": 1.0006315491537783
+            },
+            {
+              "n": 200.0,
+              "R": 0.010179541500008327,
+              "throughput": 19647.250320639334,
+              "rounds": 2,
+              "spread": 1.0077987164093418
+            },
+            {
+              "n": 256.0,
+              "R": 0.010250679500003912,
+              "throughput": 24973.954165663097,
+              "rounds": 2,
+              "spread": 1.0080101561326775
+            }
+          ],
+          "beyond_range": true,
+          "peak_n": 2110.0,
+          "peak_throughput": 104722.26090766894
+        },
+        "error": null
+      }
+    ],
+    "evidence": {
+      "complexity": [
+        {
+          "target": "monthly_report",
+          "exponent": 0.8600668639306749,
+          "exponent_ci": [
+            0.7885386457566926,
+            0.9315950821046571
+          ],
+          "class": "O(n log n)",
+          "expression": "4.01077e-08*n*log2(n) + 0.000318128",
+          "r2": 0.9996029985457153,
+          "superlinear": false,
+          "confidence": 0.27770483202970186,
+          "decades": 2.7781512503836434,
+          "n_min": 20.0,
+          "n_max": 12000.0,
+          "rows": [
+            {
+              "n": 20.0,
+              "elapsed_s": 0.0002709709999635379,
+              "t_min": 0.00026767500003188616,
+              "t_max": 0.00029444500000863627,
+              "spread": 1.1000093395855466
+            },
+            {
+              "n": 40.0,
+              "elapsed_s": 0.0002822420000256898,
+              "t_min": 0.0002742270000339886,
+              "t_max": 0.00030281100004003747,
+              "spread": 1.1042348127737462
+            },
+            {
+              "n": 82.0,
+              "elapsed_s": 0.00031881199998906595,
+              "t_min": 0.00031197900000279333,
+              "t_max": 0.00034088400002474373,
+              "spread": 1.0926504669278754
+            },
+            {
+              "n": 168.0,
+              "elapsed_s": 0.0003766410000025644,
+              "t_min": 0.0003723919999742975,
+              "t_max": 0.00040641599997570665,
+              "spread": 1.0913660873589053
+            },
+            {
+              "n": 343.0,
+              "elapsed_s": 0.00041238800002929565,
+              "t_min": 0.0004080799999996998,
+              "t_max": 0.00045695199997908276,
+              "spread": 1.1197608311591327
+            },
+            {
+              "n": 698.0,
+              "elapsed_s": 0.0005916860000070301,
+              "t_min": 0.0005884600000172213,
+              "t_max": 0.0006546150000303896,
+              "spread": 1.1124205553669446
+            },
+            {
+              "n": 1422.0,
+              "elapsed_s": 0.0009647200000131306,
+              "t_min": 0.0009592600000019047,
+              "t_max": 0.0010021009999832131,
+              "spread": 1.0446604674240805
+            },
+            {
+              "n": 2896.0,
+              "elapsed_s": 0.0017338810000069316,
+              "t_min": 0.0017224300000293624,
+              "t_max": 0.00180790199999592,
+              "spread": 1.0496229164407846
+            },
+            {
+              "n": 5895.0,
+              "elapsed_s": 0.003298993999976574,
+              "t_min": 0.003278566000005867,
+              "t_max": 0.003362745000003997,
+              "spread": 1.0256755544948553
+            },
+            {
+              "n": 12000.0,
+              "elapsed_s": 0.0068103589999850556,
+              "t_min": 0.006513348999988011,
+              "t_max": 0.007005497000022842,
+              "spread": 1.0755599001428815
+            }
+          ]
+        }
+      ],
+      "stability": [
+        {
+          "target": "checkout_db",
+          "kappa": 2.2451169203694246e-07,
+          "kappa_ci": [
+            5.572863002462125e-08,
+            2.7124672921511534e-07
+          ],
+          "p_value": 0.0005927327634637214,
+          "sigma": 1.4666501949869051e-26,
+          "evidence": true,
+          "adequate": true,
+          "raw_peak_tp": 24973.954165663097,
+          "raw_peak_n": 256.0,
+          "base": 0.01007892942662241,
+          "r2": 0.7653458936748792,
+          "n_levels": 20,
+          "n_max_measured": 256,
+          "kappa_floor": null,
+          "floor_ratio": null,
+          "exceeds_floor": null,
+          "rows": [
+            {
+              "n": 1.0,
+              "R": 0.0101171609999966,
+              "throughput": 98.84195773896809,
+              "rounds": 2,
+              "spread": 1.000425506293334
+            },
+            {
+              "n": 2.0,
+              "R": 0.010116667500000176,
+              "throughput": 197.69355867433273,
+              "rounds": 2,
+              "spread": 1.000594344564715
+            },
+            {
+              "n": 3.0,
+              "R": 0.010111647750008501,
+              "throughput": 296.6875502558401,
+              "rounds": 2,
+              "spread": 1.0004917816168128
+            },
+            {
+              "n": 4.0,
+              "R": 0.010077529000014351,
+              "throughput": 396.92269801399766,
+              "rounds": 2,
+              "spread": 1.0004823773958373
+            },
+            {
+              "n": 6.0,
+              "R": 0.01007249200000615,
+              "throughput": 595.68178361386,
+              "rounds": 2,
+              "spread": 1.0000870726160953
+            },
+            {
+              "n": 8.0,
+              "R": 0.010078966750000973,
+              "throughput": 793.7321551337817,
+              "rounds": 2,
+              "spread": 1.0002147772201047
+            },
+            {
+              "n": 12.0,
+              "R": 0.010073852250002346,
+              "throughput": 1191.2027000393225,
+              "rounds": 2,
+              "spread": 1.0001482660941166
+            },
+            {
+              "n": 16.0,
+              "R": 0.010074647999985586,
+              "throughput": 1588.1448165755162,
+              "rounds": 2,
+              "spread": 1.0002267333712629
+            },
+            {
+              "n": 20.0,
+              "R": 0.01007850575000191,
+              "throughput": 1984.4211529071372,
+              "rounds": 2,
+              "spread": 1.0006482724004542
+            },
+            {
+              "n": 24.0,
+              "R": 0.010072632000017734,
+              "throughput": 2382.6940168128594,
+              "rounds": 2,
+              "spread": 1.0002531932891394
+            },
+            {
+              "n": 32.0,
+              "R": 0.01008388075000255,
+              "throughput": 3173.3814384895327,
+              "rounds": 2,
+              "spread": 1.0012378389831218
+            },
+            {
+              "n": 40.0,
+              "R": 0.010079700499986188,
+              "throughput": 3968.371877721447,
+              "rounds": 2,
+              "spread": 1.000118760578959
+            },
+            {
+              "n": 48.0,
+              "R": 0.01008165925001947,
+              "throughput": 4761.121042640605,
+              "rounds": 2,
+              "spread": 1.0003294147137498
+            },
+            {
+              "n": 64.0,
+              "R": 0.010083954999998923,
+              "throughput": 6346.716144608622,
+              "rounds": 2,
+              "spread": 1.0002366415024695
+            },
+            {
+              "n": 80.0,
+              "R": 0.010079280999988782,
+              "throughput": 7937.074082971696,
+              "rounds": 2,
+              "spread": 1.00037073006416
+            },
+            {
+              "n": 96.0,
+              "R": 0.010083029749992534,
+              "throughput": 9520.947808377843,
+              "rounds": 2,
+              "spread": 1.0008697099902912
+            },
+            {
+              "n": 128.0,
+              "R": 0.010082017000030419,
+              "throughput": 12695.872264410365,
+              "rounds": 2,
+              "spread": 1.0001797420932672
+            },
+            {
+              "n": 160.0,
+              "R": 0.010092661999976826,
+              "throughput": 15853.101986410262,
+              "rounds": 2,
+              "spread": 1.0006315491537783
+            },
+            {
+              "n": 200.0,
+              "R": 0.010179541500008327,
+              "throughput": 19647.250320639334,
+              "rounds": 2,
+              "spread": 1.0077987164093418
+            },
+            {
+              "n": 256.0,
+              "R": 0.010250679500003912,
+              "throughput": 24973.954165663097,
+              "rounds": 2,
+              "spread": 1.0080101561326775
+            }
+          ],
+          "beyond_range": true,
+          "peak_n": 2110.0,
+          "peak_throughput": 104722.26090766894
+        }
+      ]
+    }
+  },
+  "certificate": "## SYN \u2014 merge PASS\n\n`main-31cd368` \u00b7 2026-09-26T20:52:10+00:00\n\n### Complexity (resource vs INPUT SIZE)\n- `monthly_report`: exponent **0.86** (95% CI [0.79, 0.93]), superlinear=False\n\n### Stability (latency vs CONCURRENCY)\n- `checkout_db`: coherency term detected (p=5.9e-04, kappa 2.25e-07) but its fitted peak at N=2110, beyond 2x the measured N=256 \u2014 an extrapolation, not an observed cliff; no trap reported\n\n### Findings\n- [complexity/ok] monthly_report: exponent 0.86 CI[0.79,0.93] (2.8 decades)\n- [stability/ok] checkout_db: coherency term detected (p=5.9e-04, kappa=2.25e-07) but its fitted peak at N=2110 lies beyond 2x the largest concurrency measured (N=256); the cliff is an extrapolation, not an observation. No trap reported.\n\n_probe timings: complexity:monthly_report=0.2s, stability:checkout_db=9.2s_\n\n_Early warning from measured capacity and complexity laws. Statistical, not certain._",
+  "timings": {
+    "complexity:monthly_report": 0.24370646476745605,
+    "stability:checkout_db": 9.166933298110962
+  },
+  "manifest": {
+    "path": "syn.ci.json",
+    "refs": {
+      "monthly_report": "sample_app.checkout:monthly_report",
+      "checkout_db": "sample_app.checkout:CHECKOUT_DB.call"
+    }
+  },
+  "code_graph": {
+    "graph": {
+      "packages": [
+        "sample_app"
+      ],
+      "nodes": [
+        {
+          "id": "sample_app.checkout:monthly_report",
+          "module": "sample_app.checkout",
+          "name": "monthly_report",
+          "kind": "function",
+          "file": "sample_app/checkout.py",
+          "line": 25,
+          "route": null,
+          "layer": 2,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.checkout:checkout",
+          "module": "sample_app.checkout",
+          "name": "checkout",
+          "kind": "function",
+          "file": "sample_app/checkout.py",
+          "line": 30,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.contended:ContendedService",
+          "module": "sample_app.contended",
+          "name": "ContendedService",
+          "kind": "class",
+          "file": "sample_app/contended.py",
+          "line": 13,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.contended:ContendedService.__init__",
+          "module": "sample_app.contended",
+          "name": "ContendedService.__init__",
+          "kind": "method",
+          "file": "sample_app/contended.py",
+          "line": 14,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.contended:ContendedService.handle",
+          "module": "sample_app.contended",
+          "name": "ContendedService.handle",
+          "kind": "method",
+          "file": "sample_app/contended.py",
+          "line": 22,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.contended_db:ContendedDB",
+          "module": "sample_app.contended_db",
+          "name": "ContendedDB",
+          "kind": "class",
+          "file": "sample_app/contended_db.py",
+          "line": 23,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.contended_db:ContendedDB.__init__",
+          "module": "sample_app.contended_db",
+          "name": "ContendedDB.__init__",
+          "kind": "method",
+          "file": "sample_app/contended_db.py",
+          "line": 24,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.contended_db:ContendedDB.theoretical_peak_n",
+          "module": "sample_app.contended_db",
+          "name": "ContendedDB.theoretical_peak_n",
+          "kind": "method",
+          "file": "sample_app/contended_db.py",
+          "line": 32,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.contended_db:ContendedDB.call",
+          "module": "sample_app.contended_db",
+          "name": "ContendedDB.call",
+          "kind": "method",
+          "file": "sample_app/contended_db.py",
+          "line": 36,
+          "route": null,
+          "layer": 2,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.db:FakeDB",
+          "module": "sample_app.db",
+          "name": "FakeDB",
+          "kind": "class",
+          "file": "sample_app/db.py",
+          "line": 9,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.db:FakeDB.__init__",
+          "module": "sample_app.db",
+          "name": "FakeDB.__init__",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 10,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.db:FakeDB.seed",
+          "module": "sample_app.db",
+          "name": "FakeDB.seed",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 21,
+          "route": null,
+          "layer": 1,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.db:FakeDB.degrade",
+          "module": "sample_app.db",
+          "name": "FakeDB.degrade",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 26,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.db:FakeDB.saturated",
+          "module": "sample_app.db",
+          "name": "FakeDB.saturated",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 31,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.db:FakeDB._tick",
+          "module": "sample_app.db",
+          "name": "FakeDB._tick",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 34,
+          "route": null,
+          "layer": 3,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.db:FakeDB.query_orders",
+          "module": "sample_app.db",
+          "name": "FakeDB.query_orders",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 48,
+          "route": null,
+          "layer": 2,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.db:FakeDB.query_items",
+          "module": "sample_app.db",
+          "name": "FakeDB.query_items",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 52,
+          "route": null,
+          "layer": 2,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.db:FakeDB.query_all_items",
+          "module": "sample_app.db",
+          "name": "FakeDB.query_all_items",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 56,
+          "route": null,
+          "layer": 2,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.db:FakeDB.reset_counters",
+          "module": "sample_app.db",
+          "name": "FakeDB.reset_counters",
+          "kind": "method",
+          "file": "sample_app/db.py",
+          "line": 63,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.main:_startup",
+          "module": "sample_app.main",
+          "name": "_startup",
+          "kind": "function",
+          "file": "sample_app/main.py",
+          "line": 22,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.main:metrics",
+          "module": "sample_app.main",
+          "name": "metrics",
+          "kind": "function",
+          "file": "sample_app/main.py",
+          "line": 27,
+          "route": "GET /metrics",
+          "layer": 0,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.main:work",
+          "module": "sample_app.main",
+          "name": "work",
+          "kind": "function",
+          "file": "sample_app/main.py",
+          "line": 42,
+          "route": "GET /work",
+          "layer": 0,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.main:checkout",
+          "module": "sample_app.main",
+          "name": "checkout",
+          "kind": "function",
+          "file": "sample_app/main.py",
+          "line": 59,
+          "route": "POST /checkout",
+          "layer": 0,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.main:order",
+          "module": "sample_app.main",
+          "name": "order",
+          "kind": "function",
+          "file": "sample_app/main.py",
+          "line": 67,
+          "route": "GET /order/{order_id}",
+          "layer": 0,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.main:trigger",
+          "module": "sample_app.main",
+          "name": "trigger",
+          "kind": "function",
+          "file": "sample_app/main.py",
+          "line": 76,
+          "route": "POST /trigger",
+          "layer": 0,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.main:reset",
+          "module": "sample_app.main",
+          "name": "reset",
+          "kind": "function",
+          "file": "sample_app/main.py",
+          "line": 84,
+          "route": "POST /reset",
+          "layer": 0,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.order_service:list_orders_with_items",
+          "module": "sample_app.order_service",
+          "name": "list_orders_with_items",
+          "kind": "function",
+          "file": "sample_app/order_service.py",
+          "line": 24,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.order_service:build_order_report",
+          "module": "sample_app.order_service",
+          "name": "build_order_report",
+          "kind": "function",
+          "file": "sample_app/order_service.py",
+          "line": 31,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.order_service:build_order_report_fixed",
+          "module": "sample_app.order_service",
+          "name": "build_order_report_fixed",
+          "kind": "function",
+          "file": "sample_app/order_service.py",
+          "line": 43,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.order_service:order_with_retries",
+          "module": "sample_app.order_service",
+          "name": "order_with_retries",
+          "kind": "function",
+          "file": "sample_app/order_service.py",
+          "line": 52,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.retry_loop:RetryStats",
+          "module": "sample_app.retry_loop",
+          "name": "RetryStats",
+          "kind": "class",
+          "file": "sample_app/retry_loop.py",
+          "line": 18,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.retry_loop:RetryStats.__init__",
+          "module": "sample_app.retry_loop",
+          "name": "RetryStats.__init__",
+          "kind": "method",
+          "file": "sample_app/retry_loop.py",
+          "line": 19,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        },
+        {
+          "id": "sample_app.retry_loop:RetryStats.snapshot",
+          "module": "sample_app.retry_loop",
+          "name": "RetryStats.snapshot",
+          "kind": "method",
+          "file": "sample_app/retry_loop.py",
+          "line": 26,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.retry_loop:RetryStats.reset",
+          "module": "sample_app.retry_loop",
+          "name": "RetryStats.reset",
+          "kind": "method",
+          "file": "sample_app/retry_loop.py",
+          "line": 33,
+          "route": null,
+          "layer": 1,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.retry_loop:call_with_retries",
+          "module": "sample_app.retry_loop",
+          "name": "call_with_retries",
+          "kind": "function",
+          "file": "sample_app/retry_loop.py",
+          "line": 44,
+          "route": null,
+          "layer": 2,
+          "reachable": true
+        },
+        {
+          "id": "sample_app.retry_loop:healthy_call",
+          "module": "sample_app.retry_loop",
+          "name": "healthy_call",
+          "kind": "function",
+          "file": "sample_app/retry_loop.py",
+          "line": 71,
+          "route": null,
+          "layer": 0,
+          "reachable": false
+        }
+      ],
+      "edges": [
+        {
+          "source": "sample_app.checkout:checkout",
+          "target": "sample_app.checkout:monthly_report",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.checkout:checkout",
+          "target": "sample_app.contended_db:ContendedDB.call",
+          "kind": "call",
+          "via": "sample_app.checkout:CHECKOUT_DB"
+        },
+        {
+          "source": "sample_app.checkout:monthly_report",
+          "target": "sample_app.order_service:build_order_report_fixed",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.db:FakeDB.query_all_items",
+          "target": "sample_app.db:FakeDB._tick",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.db:FakeDB.query_items",
+          "target": "sample_app.db:FakeDB._tick",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.db:FakeDB.query_orders",
+          "target": "sample_app.db:FakeDB._tick",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.main:_startup",
+          "target": "sample_app.db:FakeDB.seed",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.main:checkout",
+          "target": "sample_app.checkout:checkout",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.main:metrics",
+          "target": "sample_app.retry_loop:RetryStats.snapshot",
+          "kind": "call",
+          "via": "sample_app.retry_loop:STATS"
+        },
+        {
+          "source": "sample_app.main:order",
+          "target": "sample_app.order_service:order_with_retries",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.main:reset",
+          "target": "sample_app.db:FakeDB.reset_counters",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.main:reset",
+          "target": "sample_app.retry_loop:RetryStats.reset",
+          "kind": "call",
+          "via": "sample_app.retry_loop:STATS"
+        },
+        {
+          "source": "sample_app.main:trigger",
+          "target": "sample_app.db:FakeDB.degrade",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.main:work",
+          "target": "sample_app.db:FakeDB.reset_counters",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.main:work",
+          "target": "sample_app.order_service:build_order_report",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.main:work",
+          "target": "sample_app.order_service:build_order_report_fixed",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.main:work",
+          "target": "sample_app.order_service:list_orders_with_items",
+          "kind": "call",
+          "via": null
+        },
+        {
+          "source": "sample_app.order_service:build_order_report",
+          "target": "sample_app.db:FakeDB.query_all_items",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.order_service:build_order_report",
+          "target": "sample_app.db:FakeDB.query_orders",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.order_service:build_order_report_fixed",
+          "target": "sample_app.db:FakeDB.query_all_items",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.order_service:build_order_report_fixed",
+          "target": "sample_app.db:FakeDB.query_orders",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.order_service:list_orders_with_items",
+          "target": "sample_app.db:FakeDB.query_items",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.order_service:list_orders_with_items",
+          "target": "sample_app.db:FakeDB.query_orders",
+          "kind": "call",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.order_service:order_with_retries",
+          "target": "sample_app.db:FakeDB.query_items",
+          "kind": "ref",
+          "via": "sample_app.db:DB"
+        },
+        {
+          "source": "sample_app.order_service:order_with_retries",
+          "target": "sample_app.retry_loop:call_with_retries",
+          "kind": "call",
+          "via": null
+        }
+      ],
+      "entrypoints": [
+        "sample_app.main:metrics",
+        "sample_app.main:work",
+        "sample_app.main:checkout",
+        "sample_app.main:order",
+        "sample_app.main:trigger",
+        "sample_app.main:reset"
+      ],
+      "parse_errors": [],
+      "stats": {
+        "nodes": 36,
+        "edges": 25,
+        "modules": 8,
+        "entrypoints": 6
+      }
+    },
+    "resolution": {
+      "sample_app.checkout:monthly_report": [
+        "sample_app.checkout:monthly_report",
+        null
+      ],
+      "sample_app.checkout:CHECKOUT_DB.call": [
+        "sample_app.contended_db:ContendedDB.call",
+        "sample_app.checkout:CHECKOUT_DB"
+      ]
+    },
+    "built_at": 1790455930.218935
+  }
+}
