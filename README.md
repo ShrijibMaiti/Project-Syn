@@ -25,7 +25,7 @@ None were flagged.
 
 ## Try it: break the code, watch SYN refuse it
 
-**Live dashboard:** https://YOUR-PROJECT.vercel.app — every run on it was
+**Live dashboard:** https://project-syn-six.vercel.app — every run on it was
 measured on a GitHub Actions runner, by the workflow in this repo, for a real
 commit. Nothing on it is typed in by hand.
 
@@ -56,6 +56,62 @@ Notes, stated plainly:
 - A PR can edit the gate itself. In real use, pin the gate to a trusted ref. The
   publish step never runs PR code: it validates the run artifact as data and
   only lets a PR publish its own run.
+
+---
+
+## Same pages, different code, different laws
+
+The dashboard has no hardcoded results: every curve, number and verdict is
+read from a stored run. Each screenshot below puts the same page side by side
+for two different runs:
+
+| | Left: `demo-faulty` | Right: `main-6040fd4` |
+|---|---|---|
+| Measured on | a developer laptop (`localhost`) | a GitHub Actions runner (the [live dashboard](https://project-syn-six.vercel.app)) |
+| Manifest | `syn.json` | `syn.ci.json` |
+| Stability target | `CONTENDED_DB`, coherency cost 1e-4 (planted fault) | `CHECKOUT_DB`, coherency cost 0.0 (healthy) |
+| Complexity target | `build_order_report`, nested-loop join | `build_order_report_fixed`, indexed join |
+| Verdict | **REFUSED** | **PASS** |
+
+The layout is identical; the laws are not. (The machine differs too, so the
+exact numbers are not comparable, but the shapes are: a fault that exists
+produces a cliff on any machine, and a healthy service produces none.)
+
+**Stability — throughput vs concurrency N.** Faulty: throughput peaks at
+533 rps at N = 12, then collapses 17× by N = 256, with a separatrix at
+N = 18.5. Healthy: each call costs a flat 10 ms, so throughput grows in
+proportion to N, to 25,434 rps at N = 256. No peak, no cliff.
+
+![Stability: capacity curve](docs/img/stability-curve.png)
+
+Latency tells the same story. Faulty: latency climbs steeply, and only the
+model with a coherency term κ fits it. Healthy: latency is flat at 10 ms, and
+the two models coincide.
+
+![Stability: two fitted models](docs/img/stability-models.png)
+
+**Evidence — does κ explain the data better than chance?** Faulty: the nested
+F-test gives p = 2.90e-6, κ = 9.68e-3, 429× the instrument's own noise floor,
+so there is evidence of a trap. Healthy: p = 1.00 and κ ≈ 1e-20, so there is
+no evidence of a trap.
+
+![Evidence: model comparison](docs/img/evidence-models.png)
+![Evidence: plain-language conclusion](docs/img/evidence-conclusion.png)
+
+**Complexity — cost vs input size n.** Faulty: growth exponent 1.88
+(95% CI 1.51–2.25), which crosses a 30 s timeout at n ≈ 22,872 records.
+Healthy: exponent 0.74 (CI 0.64–0.85), no crossing predicted.
+
+![Complexity: scaling law](docs/img/complexity-law.png)
+![Complexity: the fact that decides the verdict](docs/img/complexity-verdict.png)
+
+**Sensitivity — what would change the verdict.** Faulty: the smallest change
+that lifts the refusal is bringing the exponent to 1.2 or below. Healthy:
+nothing to change; the page shows only how far each quantity could drift
+before the answer changes.
+
+![Sensitivity: the minimum change](docs/img/sensitivity-change.png)
+![Sensitivity: exponent against the gate](docs/img/sensitivity-exponent.png)
 
 ---
 
