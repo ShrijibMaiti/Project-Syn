@@ -113,6 +113,18 @@ before the answer changes.
 ![Sensitivity: the minimum change](docs/img/sensitivity-change.png)
 ![Sensitivity: exponent against the gate](docs/img/sensitivity-exponent.png)
 
+The stability half of this page exists **only for a run with a cliff**. For the
+faulty run, it computes the exact load at which the gate changes its answer
+(passes at ≤ 301 rps, refuses above 464 rps, against 453 rps today) and the
+levers that would lift the refusal: bring κ to 4.89e-3 or below, or cap
+in-flight requests at N ≤ 10. For the healthy run there is no cliff, so the page
+prints "no cliff to move away from" instead of inventing a margin. That is why
+the right-hand side of these two screenshots shows the complexity lens, the
+only one that still has anything to measure against.
+
+![Sensitivity: headroom against offered load](docs/img/sensitivity-headroom.png)
+![Sensitivity: levers that lift the refusal](docs/img/sensitivity-levers.png)
+
 ---
 
 ## Two lenses, two axes
