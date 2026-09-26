@@ -42,9 +42,17 @@ def run_blind(seed: int = 0, verbose: bool = True,
                                 samples_per_level=stab_samples, repeats=stab_repeats)
             r = stability_probe(t)
             unknown = r.risk is RiskLevel.UNKNOWN
-            flagged = bool(r.evidence.get("evidence")) if r.evidence else False
-            detail = (f"kappa={r.evidence.get('kappa',0):.2e} "
-                      f"p={r.evidence.get('p_value',1):.2e}")
+            ev = r.evidence or {}
+            # Flagged means a coherency cost the GATE acts on: statistically real,
+            # above the instrument's noise floor, and with its cliff inside the
+            # measured range. The F-test alone is not a detection -- on a GitHub
+            # runner, scheduler jitter passes it for a flat 10 ms service.
+            flagged = bool(ev.get("evidence") and ev.get("exceeds_floor") is not False
+                           and not ev.get("beyond_range"))
+            detail = (f"kappa={ev.get('kappa',0):.2e} "
+                      f"p={ev.get('p_value',1):.2e}"
+                      + (" (below noise floor)" if ev.get("evidence") and ev.get("exceeds_floor") is False else "")
+                      + (" (cliff beyond measured range)" if ev.get("evidence") and ev.get("beyond_range") else ""))
         results.append({"alias": alias, "kind": b["kind"], "flagged": flagged,
                         "unknown": unknown, "risk": r.risk.value,
                         "detail": detail, "summary": r.summary})
