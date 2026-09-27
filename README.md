@@ -127,6 +127,20 @@ only one that still has anything to measure against.
 
 ---
 
+## IBM Bob sessions
+
+IBM Bob, working in the IDE on this repository, produced the architecture and risk analysis behind SYN. The screenshots are in [`bob_sessions/`](bob_sessions/):
+
+| Bob task | What it produced | Screenshots |
+|---|---|---|
+| Task 01: repository and architecture analysis | Layered architecture diagram and a component-by-component responsibility table | `syn_bob_task01_architecture_analysis_*.png` |
+| Onboarding guide | Mental model, a 10-file reading order, and environment setup (PySR/Julia flagged as the hardest dependency) | `syn_bob_onboarding_guide_*.png` |
+| Risk findings | Ten ranked findings (critical to low), e.g. unbounded search loops, missing spread thresholds, partial-probe handling, webhook signature checks | `syn_bob_risk_findings_*.png` |
+| Task 04: testing and coverage analysis | Risk-ranked test plan: certificate correctness, blind detection, scale-spread guard, twin isomorphism, API and CI gate, edge cases | `syn_bob_task04_testing_coverage_*.png` |
+| Task 05: debugging and failure analysis | Three-tier failure taxonomy (fatal, theoretical, operational) with trigger, detection, handling and user message for each | `syn_bob_task05_failure_analysis_*.png` |
+
+---
+
 ## Two lenses, two axes
 
 Scaling in **input size** and scaling in **concurrency** are different physics
