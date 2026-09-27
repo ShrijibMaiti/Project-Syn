@@ -4,13 +4,13 @@
       "seed": 0,
       "scorecard": {
         "tp": 3,
-        "fp": 1,
-        "tn": 5,
+        "fp": 0,
+        "tn": 6,
         "fn": 0,
         "detection_rate": 1.0,
-        "false_positive_rate": 0.16666666666666666,
-        "precision": 0.75,
-        "accuracy": 0.8888888888888888
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "accuracy": 1.0
       },
       "abstentions": 0,
       "targets": [
@@ -20,7 +20,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "kappa=5.22e-26 p=1.00e+00",
+          "detail": "kappa=1.18e-24 p=1.00e+00",
           "why": "pure CONTENTION (linear) -- the hard negative, must not be flagged",
           "trap": true
         },
@@ -30,7 +30,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "kappa=2.20e-02 p=5.42e-06",
+          "detail": "kappa=2.09e-02 p=9.29e-06",
           "why": "strong coherency cost, kappa>0",
           "trap": false
         },
@@ -50,7 +50,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=1.02",
+          "detail": "exponent=1.06",
           "why": "indexed lookup, O(n)",
           "trap": false
         },
@@ -70,7 +70,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=1.01",
+          "detail": "exponent=1.05",
           "why": "sort, O(n log n) -- borderline, must NOT trip superlinear",
           "trap": true
         },
@@ -80,7 +80,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "exponent=2.03",
+          "detail": "exponent=2.02",
           "why": "nested-loop join, O(n^2)",
           "trap": false
         },
@@ -88,9 +88,9 @@
           "alias": "target_07",
           "true_id": "s_flat",
           "faulty": false,
-          "flagged": true,
-          "outcome": "FP",
-          "detail": "kappa=6.71e-08 p=1.49e-05",
+          "flagged": false,
+          "outcome": "OK",
+          "detail": "kappa=1.25e-07 p=3.66e-04 (cliff beyond measured range)",
           "why": "constant service time, no contention",
           "trap": false
         },
@@ -100,7 +100,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "kappa=3.67e-03 p=1.14e-04",
+          "detail": "kappa=3.67e-03 p=1.24e-04",
           "why": "weak coherency cost, kappa>0",
           "trap": false
         }
@@ -110,13 +110,13 @@
       "seed": 1,
       "scorecard": {
         "tp": 3,
-        "fp": 1,
-        "tn": 5,
+        "fp": 0,
+        "tn": 6,
         "fn": 0,
         "detection_rate": 1.0,
-        "false_positive_rate": 0.16666666666666666,
-        "precision": 0.75,
-        "accuracy": 0.8888888888888888
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "accuracy": 1.0
       },
       "abstentions": 0,
       "targets": [
@@ -126,7 +126,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "kappa=2.14e-02 p=8.16e-06",
+          "detail": "kappa=2.11e-02 p=9.22e-06",
           "why": "strong coherency cost, kappa>0",
           "trap": false
         },
@@ -136,7 +136,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "kappa=3.67e-03 p=1.18e-04",
+          "detail": "kappa=3.69e-03 p=1.32e-04",
           "why": "weak coherency cost, kappa>0",
           "trap": false
         },
@@ -146,7 +146,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "kappa=4.09e-26 p=1.00e+00",
+          "detail": "kappa=1.58e-24 p=1.00e+00",
           "why": "pure CONTENTION (linear) -- the hard negative, must not be flagged",
           "trap": true
         },
@@ -156,7 +156,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=0.99",
+          "detail": "exponent=1.01",
           "why": "N+1 -- real fault but LINEAR; must not be flagged",
           "trap": true
         },
@@ -166,7 +166,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=1.02",
+          "detail": "exponent=1.04",
           "why": "indexed lookup, O(n)",
           "trap": false
         },
@@ -176,7 +176,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "exponent=2.01",
+          "detail": "exponent=2.03",
           "why": "nested-loop join, O(n^2)",
           "trap": false
         },
@@ -184,9 +184,9 @@
           "alias": "target_06",
           "true_id": "s_flat",
           "faulty": false,
-          "flagged": true,
-          "outcome": "FP",
-          "detail": "kappa=7.94e-08 p=9.22e-05",
+          "flagged": false,
+          "outcome": "OK",
+          "detail": "kappa=1.78e-07 p=2.24e-04 (cliff beyond measured range)",
           "why": "constant service time, no contention",
           "trap": false
         },
@@ -196,7 +196,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=0.95",
+          "detail": "exponent=1.01",
           "why": "linear scan, O(n)",
           "trap": false
         },
@@ -206,7 +206,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=1.06",
+          "detail": "exponent=1.05",
           "why": "sort, O(n log n) -- borderline, must NOT trip superlinear",
           "trap": true
         }
@@ -216,13 +216,13 @@
       "seed": 2,
       "scorecard": {
         "tp": 3,
-        "fp": 1,
-        "tn": 5,
+        "fp": 0,
+        "tn": 6,
         "fn": 0,
         "detection_rate": 1.0,
-        "false_positive_rate": 0.16666666666666666,
-        "precision": 0.75,
-        "accuracy": 0.8888888888888888
+        "false_positive_rate": 0.0,
+        "precision": 1.0,
+        "accuracy": 1.0
       },
       "abstentions": 0,
       "targets": [
@@ -232,7 +232,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=1.03",
+          "detail": "exponent=1.05",
           "why": "indexed lookup, O(n)",
           "trap": false
         },
@@ -242,7 +242,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "kappa=3.66e-03 p=1.12e-04",
+          "detail": "kappa=3.65e-03 p=1.30e-04",
           "why": "weak coherency cost, kappa>0",
           "trap": false
         },
@@ -262,7 +262,7 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "kappa=2.09e-02 p=9.29e-06",
+          "detail": "kappa=2.11e-02 p=9.31e-06",
           "why": "strong coherency cost, kappa>0",
           "trap": false
         },
@@ -272,7 +272,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "kappa=1.88e-25 p=1.00e+00",
+          "detail": "kappa=5.45e-25 p=1.00e+00",
           "why": "pure CONTENTION (linear) -- the hard negative, must not be flagged",
           "trap": true
         },
@@ -290,9 +290,9 @@
           "alias": "target_06",
           "true_id": "s_flat",
           "faulty": false,
-          "flagged": true,
-          "outcome": "FP",
-          "detail": "kappa=9.58e-08 p=2.92e-04",
+          "flagged": false,
+          "outcome": "OK",
+          "detail": "kappa=1.05e-07 p=1.72e-01",
           "why": "constant service time, no contention",
           "trap": false
         },
@@ -302,7 +302,7 @@
           "faulty": false,
           "flagged": false,
           "outcome": "OK",
-          "detail": "exponent=0.98",
+          "detail": "exponent=1.00",
           "why": "linear scan, O(n)",
           "trap": false
         },
@@ -312,12 +312,12 @@
           "faulty": true,
           "flagged": true,
           "outcome": "OK",
-          "detail": "exponent=2.00",
+          "detail": "exponent=2.02",
           "why": "nested-loop join, O(n^2)",
           "trap": false
         }
       ]
     }
   ],
-  "created_at": 1790454802.8101573
+  "created_at": 1790474884.8009374
 }
